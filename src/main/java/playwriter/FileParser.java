@@ -131,6 +131,13 @@ public final class FileParser {
 
 	private void parseCurrentLine() {
 		String fullLine = lineParser.getLine();
+		
+		if (fullLine.charAt(0) == STAGE_DIR_START) {
+			fullLine = fullLine.substring(1).stripLeading();
+			play.writeStageDirections(fullLine);
+			return;
+		}
+		
 		String firstArgument = lineParser.getNextArgument().toUpperCase();
 
 		if (firstArgument.equals("ONSTAGE")) {
@@ -140,8 +147,6 @@ public final class FileParser {
 			play.parseAction(lineParser, new PlayOnStageAction(), new PlayOnStageAllAction(play));
 			return;
 		}
-
-		newScene = false;
 		
 		if (fullLine.toUpperCase().equals("THE END")) {
 			play.end();
@@ -178,17 +183,15 @@ public final class FileParser {
 			case "ENTER":
 				checkOneOrMoreArguments(firstArgument);
 				play.parseAction(lineParser, new PlayEnterAction(play), new PlayEnterAllAction(play));
+				newScene = false;
+				previousChar = null;
 				return;
 			case "EXIT":
 				checkOneOrMoreArguments(firstArgument);
 				play.parseAction(lineParser, new PlayExitAction(play), new PlayExitAllAction(play));
+				newScene = false;
+				previousChar = null;
 				return;
-		}
-
-		if (fullLine.charAt(0) == STAGE_DIR_START) {
-			fullLine = fullLine.substring(1).stripLeading();
-			play.writeStageDirections(fullLine);
-			return;
 		}
 
 		boolean offStage;
@@ -223,8 +226,9 @@ public final class FileParser {
 		}
 		
 		if (charName.isEmpty()) {
-			check(previousChar != null, "cannot use " + ARG_SEPARATOR + " without anything before as the first line of the play");
+			check(previousChar != null, "cannot use '" + ARG_SEPARATOR + "' without anything before as the first line of a scene or after 'ENTER' or 'EXIT'");
 			character = previousChar;
+			offStage = !character.hasEntered();
 		} else character = play.findCharacter(charName);
 		
 		check(!content.isEmpty(), "cannot write empty speech for character " + character.getName());
@@ -235,6 +239,7 @@ public final class FileParser {
 		}
 
 		play.writeSpeech(character, content, offStage, true, whiteSpaces);
+		newScene = false;
 		previousChar = character;
 	}
 	
