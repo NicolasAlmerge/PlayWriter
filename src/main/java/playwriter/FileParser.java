@@ -45,6 +45,10 @@ public final class FileParser {
 	public void output() {
 		play.outputPlay();
 	}
+	
+	public void closePlayWithFailMessage() {
+		play.closePdfWithFailMessage();
+	}
 
 	private void getNextLine() throws IOException {
 		do {

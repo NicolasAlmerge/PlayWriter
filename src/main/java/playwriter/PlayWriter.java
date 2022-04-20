@@ -34,13 +34,17 @@ public final class PlayWriter {
 		// Get directory to have absolute paths
 		String dir = dialog.getDirectory();
 		
+		// File parser
+		FileParser fp = null;
+		
 		try {
 			// Parse play
-			FileParser fp = new FileParser(new FileReader(dir + inputFile), dir + outputFile);
+			fp = new FileParser(new FileReader(dir + inputFile), dir + outputFile);
 			fp.parseAll();
 			fp.output();
 		} catch (IOException | IllegalArgumentException | PlayCompileTimeError e) {
 			// Show error message
+			if (fp != null) fp.closePlayWithFailMessage();
 			showMessageDialog(null, e.getMessage(), WINDOW_TITLE, ERROR_MESSAGE);
 			return;
 		}

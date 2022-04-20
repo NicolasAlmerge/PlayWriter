@@ -1,5 +1,6 @@
 package playwriter;
 
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,7 +67,8 @@ public final class Play {
     private int titleSize = 24;
     private int speechPadding = 6;
     
-    private final Document document;
+    private final String fileName;
+    private Document document;
     
     private final PdfFont NORMAL = createFont(TIMES_ROMAN);
     private final PdfFont BOLD = createFont(TIMES_BOLD);
@@ -81,7 +83,8 @@ public final class Play {
     private boolean hasTalked = false;
     
     public Play(String outputFileName) throws IOException {
-		PdfDocument pdf = new PdfDocument(new PdfWriter(new FileOutputStream(outputFileName)));
+    	fileName = outputFileName;
+		PdfDocument pdf = new PdfDocument(new PdfWriter(new FileOutputStream(fileName)));
 		pdf.addNewPage();
 		pdf.getDocumentInfo().setAuthor("PlayWriter Application");
 		document = new Document(pdf);
@@ -355,6 +358,19 @@ public final class Play {
     	check(hasBegun, "cannot output a play that has not begun");
     	check(hasEnded, "cannot output a play that has not ended");
     	document.close();
+    }
+    
+    public void closePdfWithFailMessage() {
+    	document.close();
+		try {
+			PdfDocument pdf = new PdfDocument(new PdfWriter(new FileOutputStream(fileName)));
+			pdf.addNewPage();
+			pdf.getDocumentInfo().setAuthor("PlayWriter Application");
+			document = new Document(pdf);
+	    	Paragraph p = new Paragraph(new Text("\n\n\n\n\n\n\n\nThe play generation failed due to a compilation error.").addStyle(new Style().setFont(createFont(TIMES_BOLD)))).setFontSize(28).setTextAlignment(CENTER);
+	    	document.add(p);
+	    	document.close();
+		} catch (IOException e) {}
     }
 
     private void checkBetweenBeginAndEnd() {
