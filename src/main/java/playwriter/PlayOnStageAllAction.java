@@ -22,5 +22,6 @@ public final class PlayOnStageAllAction implements PlayAction {
 		}
 		
 		for (Character c: remaining) c.enter();
+		play.resetWidth();
 	}
 }

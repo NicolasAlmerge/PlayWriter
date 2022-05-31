@@ -81,6 +81,7 @@ public final class Play {
     private float lastWidth = 0;
     private final Rectangle pageSize;
     private boolean hasTalked = false;
+    private boolean newScene = false;
     
     public Play(String outputFileName) throws IOException {
     	fileName = outputFileName;
@@ -224,6 +225,7 @@ public final class Play {
     	checkBetweenBeginAndEnd();
     	check(outsideScene || hasTalked, "cannot end a scene where characters didn't talk");
     	hasTalked = false;
+    	newScene = true;
 
     	String numberText = pair.getFirstArgument();
     	String description = pair.getSecondArgument();
@@ -247,7 +249,6 @@ public final class Play {
 
     public void parseAction(LineParser lp, PlayAction function, PlayAction functionAll) {
     	checkInsideScene();
-    	lastWidth = 0;
     	String arg = lp.getFirstArgument().toUpperCase();
     	boolean isAll;
     	List<Character> inclusions = new ArrayList<>();
@@ -291,7 +292,7 @@ public final class Play {
     	check(hasTalked, "cannot end a scene where characters didn't talk");
     	hasTalked = false;
     	Paragraph p = new Paragraph().setFontSize(textSize);
-    	p.add(new Text("CURTAIN").addStyle(DEFAULT_FONT));
+    	p.add(new Text("\nCURTAIN").addStyle(DEFAULT_FONT));
     	document.add(p);
     	outsideAct = true;
     	outsideScene = true;
@@ -331,14 +332,21 @@ public final class Play {
     	table.addCell(new Cell().setPaddingLeft(speechPadding).setBorder(NO_BORDER).add(content).setTextAlignment(JUSTIFIED));
     	document.add(table);
     	lastWidth = newWidth;
+    	newScene = false;
+    }
+    
+    public void writeStageDirections(String text, boolean addNewSpaces) {
+    	checkBetweenBeginAndEnd();
+    	Paragraph p = new Paragraph().setFontSize(textSize);
+    	if (addNewSpaces) p.add(new Text(((newScene || lastWidth > 0)? "\n": "") + text + "\n\0\n").addStyle(ITALIC_FONT));
+    	else p.add(new Text(((newScene || lastWidth > 0)? "\n": "") + "\0\t\t" + text + "\n\0\n").addStyle(ITALIC_FONT));
+    	document.add(p);
+    	lastWidth = 0;
+    	newScene = false;
     }
     
     public void writeStageDirections(String text) {
-    	checkBetweenBeginAndEnd();
-    	Paragraph p = new Paragraph().setFontSize(textSize);
-    	p.add(new Text(text).addStyle(ITALIC_FONT));
-    	document.add(p);
-    	lastWidth = 0;
+    	writeStageDirections(text, true);
     }
     
     public void end() {
@@ -347,10 +355,9 @@ public final class Play {
     	check(!hasEnded, "cannot use the 'END' keyword twice or more");
 
         hasEnded = true;
-        newLine();
         
         Paragraph p = new Paragraph().setFontSize(textSize).setTextAlignment(CENTER);
-        p.add(new Text("\nTHE END").addStyle(BOLD_FONT));
+        p.add(new Text("\n\0\nTHE END").addStyle(BOLD_FONT));
         document.add(p);
     }
     
@@ -371,6 +378,10 @@ public final class Play {
 	    	document.add(p);
 	    	document.close();
 		} catch (IOException e) {}
+    }
+    
+    public void resetWidth() {
+    	lastWidth = 0;
     }
 
     private void checkBetweenBeginAndEnd() {

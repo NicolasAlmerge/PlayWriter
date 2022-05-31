@@ -138,7 +138,7 @@ public final class FileParser {
 		
 		if (fullLine.charAt(0) == STAGE_DIR_START) {
 			fullLine = fullLine.substring(1).stripLeading();
-			play.writeStageDirections(fullLine);
+			play.writeStageDirections(fullLine, false);
 			return;
 		}
 		
@@ -148,7 +148,7 @@ public final class FileParser {
 			check(newScene, "ONSTAGE can only be used after a new scene");
 			checkOneOrMoreArguments("ONSTAGE");
 			newScene = false;
-			play.parseAction(lineParser, new PlayOnStageAction(), new PlayOnStageAllAction(play));
+			play.parseAction(lineParser, new PlayOnStageAction(play), new PlayOnStageAllAction(play));
 			return;
 		}
 		
