@@ -138,7 +138,7 @@ public final class FileParser {
 		
 		if (fullLine.charAt(0) == STAGE_DIR_START) {
 			fullLine = fullLine.substring(1).stripLeading();
-			play.writeStageDirections(fullLine, false);
+			play.writeStageDirections(fullLine);
 			return;
 		}
 		

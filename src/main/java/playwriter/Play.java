@@ -49,9 +49,10 @@ public final class Play {
 	
 	private String title = "";
     private String author = "";
-
+    
     private boolean hasBegun = false;
     private boolean hasEnded = false;
+    private boolean lastIsStageDir = false;
     private boolean outsideAct = true;
     private boolean outsideScene = true;
 
@@ -81,7 +82,6 @@ public final class Play {
     private float lastWidth = 0;
     private final Rectangle pageSize;
     private boolean hasTalked = false;
-    private boolean newScene = false;
     
     public Play(String outputFileName) throws IOException {
     	fileName = outputFileName;
@@ -98,10 +98,12 @@ public final class Play {
     
     public void newLine() {
     	getPdfDoc().getWriter().writeNewLine();
+    	lastIsStageDir = false;
     }
     
     public void newPage() {
     	document.add(new AreaBreak());
+    	lastIsStageDir = false;
     }
 
     public void setTitle(String newTitle) {
@@ -219,13 +221,14 @@ public final class Play {
     	document.add(p);
     	outsideAct = false;
     	lastWidth = 0;
+    	lastIsStageDir = false;
     }
 
     public void setScene(Pair pair) {
     	checkBetweenBeginAndEnd();
     	check(outsideScene || hasTalked, "cannot end a scene where characters didn't talk");
     	hasTalked = false;
-    	newScene = true;
+    	// newScene = true;
 
     	String numberText = pair.getFirstArgument();
     	String description = pair.getSecondArgument();
@@ -245,6 +248,7 @@ public final class Play {
     	document.add(p);
     	outsideScene = false;
     	lastWidth = 0;
+    	lastIsStageDir = false;
     }
 
     public void parseAction(LineParser lp, PlayAction function, PlayAction functionAll) {
@@ -260,6 +264,7 @@ public final class Play {
     		// If nothing left, no exceptions
     		if (lp.consumed()) {
     			functionAll.execute(inclusions);
+    			// lastIsStageDir = true;
     			return;
     		}
 
@@ -285,6 +290,7 @@ public final class Play {
     	check(!inclusions.isEmpty(), isAll? "cannot use 'ALL EXCEPT' without any character name": "no characters set after the first keyword");
     	if (isAll) functionAll.execute(inclusions);
     	else function.execute(inclusions);
+    	// lastIsStageDir = true;
     }
 
     public void curtain() {
@@ -292,11 +298,12 @@ public final class Play {
     	check(hasTalked, "cannot end a scene where characters didn't talk");
     	hasTalked = false;
     	Paragraph p = new Paragraph().setFontSize(textSize);
-    	p.add(new Text("\nCURTAIN").addStyle(DEFAULT_FONT));
+    	p.add(new Text("\n\0\t\tCURTAIN").addStyle(DEFAULT_FONT));
     	document.add(p);
     	outsideAct = true;
     	outsideScene = true;
     	lastWidth = 0;
+    	lastIsStageDir = false;
     }
 
     public Character findCharacter(String name) {
@@ -332,21 +339,20 @@ public final class Play {
     	table.addCell(new Cell().setPaddingLeft(speechPadding).setBorder(NO_BORDER).add(content).setTextAlignment(JUSTIFIED));
     	document.add(table);
     	lastWidth = newWidth;
-    	newScene = false;
-    }
-    
-    public void writeStageDirections(String text, boolean addNewSpaces) {
-    	checkBetweenBeginAndEnd();
-    	Paragraph p = new Paragraph().setFontSize(textSize);
-    	if (addNewSpaces) p.add(new Text(((newScene || lastWidth > 0)? "\n": "") + text + "\n\0\n").addStyle(ITALIC_FONT));
-    	else p.add(new Text(((newScene || lastWidth > 0)? "\n": "") + "\0\t\t" + text + "\n\0\n").addStyle(ITALIC_FONT));
-    	document.add(p);
-    	lastWidth = 0;
-    	newScene = false;
+    	// newScene = false;
+    	lastIsStageDir = false;
     }
     
     public void writeStageDirections(String text) {
-    	writeStageDirections(text, true);
+    	checkBetweenBeginAndEnd();
+    	Paragraph p = new Paragraph().setFontSize(textSize);
+    	if (!lastIsStageDir) p.setPaddingTop(textSize * (float) 0.75);
+    	p.setPaddingBottom(textSize * (float) 0.75);
+    	p.add(new Text("\0\t\t" + text).addStyle(ITALIC_FONT));
+    	document.add(p);
+    	lastWidth = 0;
+    	lastIsStageDir = true;
+    	// newScene = false;
     }
     
     public void end() {
@@ -355,6 +361,7 @@ public final class Play {
     	check(!hasEnded, "cannot use the 'END' keyword twice or more");
 
         hasEnded = true;
+        lastIsStageDir = false;
         
         Paragraph p = new Paragraph().setFontSize(textSize).setTextAlignment(CENTER);
         p.add(new Text("\n\0\nTHE END").addStyle(BOLD_FONT));
@@ -374,7 +381,11 @@ public final class Play {
 			pdf.addNewPage();
 			pdf.getDocumentInfo().setAuthor("PlayWriter Application");
 			document = new Document(pdf);
-	    	Paragraph p = new Paragraph(new Text("\n\n\n\n\n\n\n\nThe play generation failed due to a compilation error.").addStyle(new Style().setFont(createFont(TIMES_BOLD)))).setFontSize(28).setTextAlignment(CENTER);
+	    	Paragraph p = new Paragraph(
+	    		new Text("\n\n\n\n\n\n\n\nThe play generation failed due to a compilation error.").addStyle(
+	    			new Style().setFont(createFont(TIMES_BOLD))
+	    		)
+	    	).setFontSize(28).setTextAlignment(CENTER);
 	    	document.add(p);
 	    	document.close();
 		} catch (IOException e) {}
