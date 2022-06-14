@@ -228,7 +228,6 @@ public final class Play {
     	checkBetweenBeginAndEnd();
     	check(outsideScene || hasTalked, "cannot end a scene where characters didn't talk");
     	hasTalked = false;
-    	// newScene = true;
 
     	String numberText = pair.getFirstArgument();
     	String description = pair.getSecondArgument();
@@ -264,7 +263,6 @@ public final class Play {
     		// If nothing left, no exceptions
     		if (lp.consumed()) {
     			functionAll.execute(inclusions);
-    			// lastIsStageDir = true;
     			return;
     		}
 
@@ -290,7 +288,6 @@ public final class Play {
     	check(!inclusions.isEmpty(), isAll? "cannot use 'ALL EXCEPT' without any character name": "no characters set after the first keyword");
     	if (isAll) functionAll.execute(inclusions);
     	else function.execute(inclusions);
-    	// lastIsStageDir = true;
     }
 
     public void curtain() {
@@ -339,7 +336,6 @@ public final class Play {
     	table.addCell(new Cell().setPaddingLeft(speechPadding).setBorder(NO_BORDER).add(content).setTextAlignment(JUSTIFIED));
     	document.add(table);
     	lastWidth = newWidth;
-    	// newScene = false;
     	lastIsStageDir = false;
     }
     
@@ -352,7 +348,6 @@ public final class Play {
     	document.add(p);
     	lastWidth = 0;
     	lastIsStageDir = true;
-    	// newScene = false;
     }
     
     public void end() {
