@@ -64,5 +64,27 @@
 	   <artifactId>slf4j-simple</artifactId>
 	   <version>1.7.32</version>
 	</dependency>
+	<dependency>
+	    <groupId>org.apache.poi</groupId>
+	    <artifactId>poi</artifactId>
+	    <version>4.1.2</version>
+	</dependency>
+	<!-- For .DOCX FILES -->
+	 <dependency>
+	    <groupId>org.apache.poi</groupId>
+	    <artifactId>poi-ooxml</artifactId>
+	    <version>4.1.2</version>
+	</dependency>
+	<!-- For .DOC FILES -->
+	<!--<dependency>
+	   <groupId>org.apache.poi</groupId>
+	    <artifactId>poi-scratchpad</artifactId>
+	    <version>3.9</version>
+	</dependency>-->
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-compress</artifactId>
+	    <version>1.18</version>
+	</dependency>
   </dependencies>
 </project>

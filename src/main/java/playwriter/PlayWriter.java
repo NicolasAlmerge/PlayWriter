@@ -6,8 +6,6 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 import java.awt.FileDialog;
-import java.io.FileReader;
-import java.io.IOException;
 import javax.swing.JFrame;
 
 
@@ -20,7 +18,15 @@ public final class PlayWriter {
 	public static void main(String[] args) {
 		// Display window
 		FileDialog dialog = new FileDialog((JFrame) null, "Select Play File");
-		dialog.setFilenameFilter((dir, fileName) -> fileName.toLowerCase().endsWith(".play"));
+		dialog.setFilenameFilter((dir, fileName) -> {
+			String extension = fileName.toLowerCase();
+			return (
+				extension.endsWith(".docx") ||
+				extension.endsWith(".doc") ||
+				extension.endsWith(".play") ||
+				extension.endsWith(".txt")
+			);
+		});
 	    dialog.setVisible(true);
 	    
 	    // Get input file, if exists
@@ -29,7 +35,17 @@ public final class PlayWriter {
 	    
 	    // Compute output file name
 		int index = inputFile.lastIndexOf('.');
-		String outputFile = (index == -1)? inputFile + ".pdf": inputFile.substring(0, index) + ".pdf";
+		String outputFile;
+		boolean isPlainText;
+
+		if (index == -1) {
+			outputFile = inputFile + ".pdf";
+			isPlainText = true;
+		} else {
+			outputFile = inputFile.substring(0, index) + ".pdf";
+			String extension = inputFile.substring(index+1);
+			isPlainText = (extension.equals("txt") || extension.equals("play"));
+		}
 		
 		// Get directory to have absolute paths
 		String dir = dialog.getDirectory();
@@ -39,10 +55,10 @@ public final class PlayWriter {
 		
 		try {
 			// Parse play
-			fp = new FileParser(new FileReader(dir + inputFile), dir + outputFile);
+			fp = new FileParser(dir+inputFile, dir+outputFile, isPlainText);
 			fp.parseAll();
 			fp.output();
-		} catch (IOException | IllegalArgumentException | PlayCompileTimeError e) {
+		} catch (Exception e) {
 			// Show error message
 			if (fp != null) fp.closePlayWithFailMessage();
 			showMessageDialog(null, e.getMessage(), WINDOW_TITLE, ERROR_MESSAGE);

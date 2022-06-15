@@ -8,11 +8,16 @@ import static playwriter.Utils.STAGE_DIR_START;
 import static playwriter.Utils.INDENTED_SPEECH_START;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.List;
+
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
 
 /**
@@ -20,14 +25,29 @@ import java.util.regex.Pattern;
  */
 public final class FileParser {
 	private final BufferedReader fp;
+	private final FileInputStream wordFp;
+	private final XWPFDocument wordDoc;
+	private final List<XWPFParagraph> paragraphs;
+	private int currParagraphIndex = 0;
 	private final Play play;
 	private CharacterView previousChar = null;
 	private boolean newScene = false;
 	private final LineParser lineParser = new LineParser();
 	private static final Pattern WS_REGEX = Pattern.compile("\\s+");
 
-	public FileParser(FileReader fileReader, String outputFileName) throws IOException {
-		fp = new BufferedReader(fileReader);
+	public FileParser(String inputFileName, String outputFileName, boolean isPlainText) throws IOException {
+		if (isPlainText) {
+			fp = new BufferedReader(new FileReader(inputFileName));
+			wordFp = null;
+			wordDoc = null;
+			paragraphs = null;
+		}
+		else {
+			fp = null;
+			wordFp = new FileInputStream(inputFileName);
+			wordDoc = new XWPFDocument(wordFp);
+			paragraphs = wordDoc.getParagraphs();
+		}
 		play = new Play(outputFileName);
 		Counter.reset();
 		getNextLine();
@@ -42,17 +62,24 @@ public final class FileParser {
 		}
 	}
 
-	public void output() {
+	public void output() throws IOException {
+		closeFile();
 		play.outputPlay();
 	}
-	
+
 	public void closePlayWithFailMessage() {
+		try {
+			closeFile();
+		} catch (Exception e) {}
 		play.closePdfWithFailMessage();
 	}
 
 	private void getNextLine() throws IOException {
 		do {
-			String line = fp.readLine();
+			String line;
+			if (fp != null) line = fp.readLine();
+			else line = (currParagraphIndex < paragraphs.size())? paragraphs.get(currParagraphIndex++).getParagraphText(): null;
+			
 			if (line == null) {
 				lineParser.updateLine("");
 				return;
@@ -65,6 +92,11 @@ public final class FileParser {
 				return;
 			}
 		} while (true);
+	}
+	
+	private void closeFile() throws IOException {
+		if (fp != null) fp.close();
+		if (wordFp != null) wordFp.close();
 	}
 
 	private void parseHeaders() throws IOException {
