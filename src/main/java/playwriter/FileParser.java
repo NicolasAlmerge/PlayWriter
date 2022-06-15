@@ -41,8 +41,7 @@ public final class FileParser {
 			wordFp = null;
 			wordDoc = null;
 			paragraphs = null;
-		}
-		else {
+		} else {
 			fp = null;
 			wordFp = new FileInputStream(inputFileName);
 			wordDoc = new XWPFDocument(wordFp);

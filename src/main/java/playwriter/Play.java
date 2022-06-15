@@ -199,9 +199,9 @@ public final class Play {
 
     public void setAct(Pair pair) {
     	checkBetweenBeginAndEnd();
-    	check(outsideScene || hasTalked, "cannot end a scene where characters didn't talk");
+    	check(outsideAct, "cannot start a new act since previous act was not closed ('CURTAIN' is missing)");
     	hasTalked = false;
-    	
+
     	String numberText = pair.getFirstArgument();
     	String description = pair.getSecondArgument();
     	check(!numberText.isEmpty(), "act number cannot be empty");
@@ -297,6 +297,7 @@ public final class Play {
     	Paragraph p = new Paragraph().setFontSize(textSize);
     	p.add(new Text("\n\0\t\tCURTAIN").addStyle(DEFAULT_FONT));
     	document.add(p);
+    	for (Character c: characters.values()) c.forceExit();
     	outsideAct = true;
     	outsideScene = true;
     	lastWidth = 0;

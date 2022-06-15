@@ -43,4 +43,8 @@ public final class Character implements CharacterView {
     	check(entered, "cannot make character " + name + " exit as it is not on stage");
         entered = false;
     }
+    
+    public void forceExit() {
+    	entered = false;
+    }
 }
