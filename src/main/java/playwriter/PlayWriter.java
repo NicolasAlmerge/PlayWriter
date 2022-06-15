@@ -19,12 +19,12 @@ public final class PlayWriter {
 		// Display window
 		FileDialog dialog = new FileDialog((JFrame) null, "Select Play File");
 		dialog.setFilenameFilter((dir, fileName) -> {
-			String extension = fileName.toLowerCase();
+			fileName = fileName.toLowerCase();
 			return (
-				extension.endsWith(".docx") ||
-				extension.endsWith(".doc") ||
-				extension.endsWith(".play") ||
-				extension.endsWith(".txt")
+				fileName.endsWith(".docx") ||
+				fileName.endsWith(".doc") ||
+				fileName.endsWith(".play") ||
+				fileName.endsWith(".txt")
 			);
 		});
 	    dialog.setVisible(true);
