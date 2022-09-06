@@ -154,7 +154,7 @@ public final class Play {
      * @return True if play has characters, false otherwise.
      */
     public boolean hasCharacters() {
-    	return characters.size() > 0;
+    	return !characters.isEmpty();
     }
 
     /**

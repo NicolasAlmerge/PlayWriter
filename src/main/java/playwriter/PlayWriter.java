@@ -43,7 +43,7 @@ public final class PlayWriter {
 			isPlainText = true;
 		} else {
 			outputFile = inputFile.substring(0, index) + ".pdf";
-			String extension = inputFile.substring(index+1);
+			String extension = inputFile.substring(index+1).toLowerCase();
 			isPlainText = (extension.equals("txt") || extension.equals("play"));
 		}
 		
