@@ -2,6 +2,9 @@ package playwriter;
 
 /**
  * Represents a line parser.
+ *
+ * @author Nicolas Almerge
+ * @since 1.0
  */
 public final class LineParser {
   private String line = "";

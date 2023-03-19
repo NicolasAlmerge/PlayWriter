@@ -2,6 +2,9 @@ package playwriter;
 
 /**
  * Represents a pair of arguments.
+ *
+ * @author Nicolas Almerge
+ * @since 1.0
  */
 public final class ArgumentPair implements Pair {
   private final String arg1;

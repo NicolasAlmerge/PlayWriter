@@ -1,7 +1,10 @@
 package playwriter;
 
 /**
- * Represents a collection of constants.
+ * Represents a collection of constants and utility functions.
+ *
+ * @author Nicolas Almerge
+ * @since 1.0
  */
 public final class Utils {
 

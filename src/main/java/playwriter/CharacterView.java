@@ -2,6 +2,9 @@ package playwriter;
 
 /**
  * Represents a read-only view of a character.
+ *
+ * @author Nicolas Almerge
+ * @since 1.0
  */
 public interface CharacterView {
 

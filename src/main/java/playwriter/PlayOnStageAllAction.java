@@ -1,11 +1,12 @@
 package playwriter;
 
-import static playwriter.Utils.check;
-
 import java.util.List;
 
 /**
  * Represents an action where all players should be on stage at the beginning of the play.
+ *
+ * @author Nicolas Almerge
+ * @since 1.0
  */
 public final class PlayOnStageAllAction implements PlayAction {
   private final Play play;

@@ -2,6 +2,9 @@ package playwriter;
 
 /**
  * Represents a pair of arguments.
+ *
+ * @author Nicolas Almerge
+ * @since 1.0
  */
 public interface Pair {
 

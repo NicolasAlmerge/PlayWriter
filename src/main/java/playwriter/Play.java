@@ -41,6 +41,9 @@ import java.util.Set;
 
 /**
  * Represents a play.
+ *
+ * @author Nicolas Almerge
+ * @since 1.0
  */
 public final class Play {
   private static final String OFFSTAGE_TEXT = " (offstage)";

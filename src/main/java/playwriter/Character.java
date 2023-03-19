@@ -2,6 +2,9 @@ package playwriter;
 
 /**
  * Represents a character.
+ *
+ * @author Nicolas Almerge
+ * @since 1.0
  */
 public final class Character implements CharacterView {
   private final String name;

@@ -2,6 +2,9 @@ package playwriter;
 
 /**
  * Represents a counter.
+ *
+ * @author Nicolas Almerge
+ * @since 1.0
  */
 public final class Counter {
   private static int lineNumber = 0;

@@ -20,6 +20,9 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
 /**
  * Represents a file parser.
+ *
+ * @author Nicolas Almerge
+ * @since 1.0
  */
 public final class FileParser {
   private static final Pattern WS_REGEX = Pattern.compile("\\s+");

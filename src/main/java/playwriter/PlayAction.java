@@ -4,6 +4,9 @@ import java.util.List;
 
 /**
  * Represents a play action.
+ *
+ * @author Nicolas Almerge
+ * @since 1.0
  */
 public interface PlayAction {
 

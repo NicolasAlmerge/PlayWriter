@@ -2,6 +2,9 @@ package playwriter;
 
 /**
  * Represents a play-compile time error.
+ *
+ * @author Nicolas Almerge
+ * @since 1.0
  */
 public final class PlayCompileTimeError extends Exception {
   /**

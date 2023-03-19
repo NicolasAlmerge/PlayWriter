@@ -5,6 +5,9 @@ import java.util.List;
 
 /**
  * Represents an action where some players should enter.
+ *
+ * @author Nicolas Almerge
+ * @since 1.0
  */
 public final class PlayEnterAction implements PlayAction {
   private final Play play;

@@ -1,12 +1,13 @@
 package playwriter;
 
-import static playwriter.Utils.check;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Represents an action where all players should exit.
+ *
+ * @author Nicolas Almerge
+ * @since 1.0
  */
 public final class PlayExitAllAction implements PlayAction {
   private final Play play;
@@ -26,7 +27,7 @@ public final class PlayExitAllAction implements PlayAction {
     List<Character> remaining = play.getCharacters();
 
     for (Character c : characters) {
-      check(c.hasEntered(),
+      Utils.check(c.hasEntered(),
           "cannot exclude character '" + c.getName() + "' since it has already exited");
       names.add(c.getName());
       remaining.remove(c);

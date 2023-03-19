@@ -9,6 +9,9 @@ import javax.swing.JFrame;
 
 /**
  * Represents the program's entry point.
+ *
+ * @author Nicolas Almerge
+ * @since 1.0
  */
 public final class PlayWriter {
   private static final String WINDOW_TITLE = "PlayWriter Application";
