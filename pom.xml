@@ -5,16 +5,16 @@
     <artifactId>playwriter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-	<properties>
+    <properties>
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<itextpdf.version>7.2.5</itextpdf.version>
-		<slf4j.version>2.0.7</slf4j.version>
-		<apache.poi.version>5.2.3</apache.poi.version>
-		<apache.commons.version>1.22</apache.commons.version>
-	</properties>
+        <itextpdf.version>7.2.5</itextpdf.version>
+        <slf4j.version>2.0.7</slf4j.version>
+        <apache.poi.version>5.2.3</apache.poi.version>
+        <apache.commons.version>1.22</apache.commons.version>
+    </properties>
 
     <dependencies>
         <dependency>
