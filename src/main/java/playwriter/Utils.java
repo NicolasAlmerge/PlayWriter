@@ -9,6 +9,11 @@ package playwriter;
 public final class Utils {
 
   /**
+   * Application version.
+   */
+  public static final String VERSION = "1.0";
+
+  /**
    * Start of a stage direction.
    */
   public static final char STAGE_DIR_START = '*';

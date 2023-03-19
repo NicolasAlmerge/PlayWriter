@@ -85,10 +85,9 @@ public final class Play {
   public Play(String outputFileName) throws IOException {
     fileName = outputFileName;
     PdfDocument pdf = new PdfDocument(new PdfWriter(new FileOutputStream(fileName)));
-    pdf.addNewPage();
-    pdf.getDocumentInfo().setAuthor("PlayWriter Application");
+    pdf.getDocumentInfo().setCreator("PlayWriter Application " + Utils.VERSION);
+    pageSize = pdf.addNewPage().getPageSize();
     document = new Document(pdf);
-    pageSize = getPdfDoc().getPage(1).getPageSize();
   }
 
   /**
@@ -121,7 +120,7 @@ public final class Play {
   }
 
   /**
-   * Sets the play title.
+   * Sets the play title. This also writes it in the PDF metadata.
    *
    * @param newTitle New title.
    * @throws PlayCompileTimeError if play title is already set or <code>newTitle</code> is empty.
@@ -130,10 +129,11 @@ public final class Play {
     check(title.isEmpty(), "play title cannot be reset");
     check(!newTitle.isEmpty(), "play title is empty");
     title = newTitle;
+    getPdfDoc().getDocumentInfo().setTitle(title);
   }
 
   /**
-   * Sets the play author.
+   * Sets the play author. This also writes it in the PDF metadata.
    *
    * @param newAuthor New title.
    * @throws PlayCompileTimeError if play author is already set or <code>newAuthor</code> is empty.
@@ -142,6 +142,7 @@ public final class Play {
     check(author.isEmpty(), "play author cannot be reset");
     check(!newAuthor.isEmpty(), "play author is empty");
     author = newAuthor;
+    getPdfDoc().getDocumentInfo().setAuthor(author);
   }
 
   /**
