@@ -1,109 +1,169 @@
 package playwriter;
 
-import static java.lang.Integer.parseUnsignedInt;
-
-
 /**
  * Represents a collection of constants.
  */
 public final class Utils {
-	
-	/**
-	 * Start of a stage direction.
-	 */
-	public static final char STAGE_DIR_START = '*';
-	
-	/**
-	 * Token separator.
-	 */
-	public static final char TOKEN_SEPARATOR = ' ';
-	
-	/**
-	 * Argument separator.
-	 */
-	public static final char ARG_SEPARATOR = ':';
 
-	/**
-	 * Value separator.
-	 */
-	public static final char VALUE_SEPARATOR = ',';
+  /**
+   * Start of a stage direction.
+   */
+  public static final char STAGE_DIR_START = '*';
 
-	/**
-	 * Start of a line with whitespace.
-	 */
-	public static final char INDENTED_SPEECH_START = '>';
+  /**
+   * Token separator.
+   */
+  public static final char TOKEN_SEPARATOR = ' ';
 
-	/**
-	 * Start of a sub-argument.
-	 */
-	public static final char SUBARGUMENT_START = '-';
+  /**
+   * Argument separator.
+   */
+  public static final char ARG_SEPARATOR = ':';
 
-	/**
-	 * Minimum font size.
-	 */
-	public static final int MIN_FONT_SIZE = 1;
+  /**
+   * Value separator.
+   */
+  public static final char VALUE_SEPARATOR = ',';
 
-	/**
-	 * Maximum font size.
-	 */
-	public static final int MAX_FONT_SIZE = 48;
-	
-	/**
-	 * Minimum padding size.
-	 */
-	public static final int MIN_PADDING_SIZE = 3;
+  /**
+   * Start of a line with whitespace.
+   */
+  public static final char INDENTED_SPEECH_START = '>';
 
-	/**
-	 * Maximum padding size.
-	 */
-	public static final int MAX_PADDING_SIZE = 50;
+  /**
+   * Start of a sub-argument.
+   */
+  public static final char SUBARGUMENT_START = '-';
 
-	/**
-	 * Check if word is a keyword.
-	 */
-	public static boolean isKeyword(String value) {
-		for (String keyword: KEYWORDS) if (value.equals(keyword)) return true;
-		return false;
-	}
+  /**
+   * Minimum font size.
+   */
+  public static final int MIN_FONT_SIZE = 1;
 
-	/**
-	 * Performs a check, and throws an error if check was not successful.
-	 */
-    public static void check(boolean result, String errorMsg) {
-    	if (!result) throw new PlayCompileTimeError(errorMsg);
+  /**
+   * Maximum font size.
+   */
+  public static final int MAX_FONT_SIZE = 48;
+
+  /**
+   * Minimum padding size.
+   */
+  public static final int MIN_PADDING_SIZE = 3;
+
+  /**
+   * Maximum padding size.
+   */
+  public static final int MAX_PADDING_SIZE = 50;
+
+  /**
+   * Array of all keywords.
+   */
+  private static final String[] KEYWORDS = {
+      "ACT", "ASGROUP", "BEGIN", "CURTAIN", "END",
+      "ENTER", "EXCEPT", "EXEUNT", "EXIT", "NEWLINE",
+      "NEWPAGE", "OFFSTAGE", "ONSTAGE", "SCENE", stringOf(ARG_SEPARATOR),
+      stringOf(VALUE_SEPARATOR), stringOf(STAGE_DIR_START), stringOf(INDENTED_SPEECH_START)
+  };
+
+  /**
+   * Private constructor.
+   */
+  private Utils() {
+  }
+
+  /**
+   * Check if word is a keyword.
+   *
+   * @param value {@link String} to check.
+   * @return <code>true</code> if <code>value</code> is a keyword, <code>false</code> otherwise.
+   */
+  public static boolean isKeyword(String value) {
+    for (String keyword : KEYWORDS) {
+      if (value.equals(keyword)) {
+        return true;
+      }
     }
-    
-    /**
-     * @return Integer conversion of text, if possible (between MIN_FONT_SIZE and MAX_FONT_SIZE).
-     */
-    public static int convertToInt(String numberText) {
-    	return convertToInt(numberText, MIN_FONT_SIZE, MAX_FONT_SIZE);
+    return false;
+  }
+
+  /**
+   * Stops the program execution by throwing a {@link PlayCompileTimeError} with the given error
+   * message.
+   *
+   * @param errorMsg Error message.
+   * @throws PlayCompileTimeError with <code>errorMsg</code> as error message.
+   */
+  public static void failWith(String errorMsg) throws PlayCompileTimeError {
+    throw new PlayCompileTimeError(errorMsg);
+  }
+
+  /**
+   * Asserts a value is <code>true</code>, or throws {@link PlayCompileTimeError} if it is
+   * <code>false</code>.
+   *
+   * @param result   Value to check.
+   * @param errorMsg Error message to use in case the check failed.
+   * @throws PlayCompileTimeError if <code>result</code> is <code>false</code>.
+   */
+  public static void check(boolean result, String errorMsg) throws PlayCompileTimeError {
+    if (!result) {
+      throw new PlayCompileTimeError(errorMsg);
     }
-    
-    /**
-     * @return Integer conversion of text, if possible (between specified minimum and maximum).
-     */
-    public static int convertToInt(String numberText, int minimum, int maximum) {
-    	int value;
-    	try {
-    		value = parseUnsignedInt(numberText);
-    	} catch (NumberFormatException e) {
-    		throw new PlayCompileTimeError(numberText + " is not recognised as a non-negative number");
-    	}
-    	check(value >= minimum && value <= maximum, "option value expect an integer from " + minimum + " to " + maximum);
-    	return value;
+  }
+
+  /**
+   * Converts a {@link String} to an integer, between {@link Utils#MIN_FONT_SIZE} and
+   * {@link Utils#MAX_FONT_SIZE}.
+   *
+   * @param numberText {@link String} to convert.
+   * @return Integer conversion of text.
+   * @throws PlayCompileTimeError if <code>numberText</code> doesn't have an unsigned integer
+   *                              format, is less than {@link Utils#MIN_FONT_SIZE} or greater than
+   *                              {@link Utils#MAX_FONT_SIZE}.
+   */
+  public static int convertFontToInt(String numberText) throws PlayCompileTimeError {
+    return convertToInt(numberText, MIN_FONT_SIZE, MAX_FONT_SIZE);
+  }
+
+  /**
+   * Converts a {@link String} to an integer, between <code>minimum</code> and <code>maximum</code>.
+   *
+   * @param numberText {@link String} to convert.
+   * @param minimum    Minimum possible value of <code>numberText</code>.
+   * @param maximum    Maximum possible value of <code>numberText</code>.
+   * @return Integer conversion of text.
+   * @throws PlayCompileTimeError if <code>numberText</code> doesn't have an unsigned integer
+   *                              format, is less than <code>minimum</code> or greater than
+   *                              <code>maximum</code>.
+   */
+  public static int convertToInt(String numberText, int minimum, int maximum)
+      throws PlayCompileTimeError {
+    int value;
+
+    // Try to convert
+    try {
+      value = Integer.parseUnsignedInt(numberText);
+    } catch (NumberFormatException e) {
+      throw new PlayCompileTimeError(numberText + " is not recognised as a non-negative number");
     }
-    
-    private static String stringOf(char c) {
-    	return String.valueOf(c);
-    }
-    
-	private static final String[] KEYWORDS = {
-		"ACT", "ASGROUP", "BEGIN", "CURTAIN", "END",
-		"ENTER", "EXCEPT", "EXEUNT", "EXIT", "NEWLINE",
-		"NEWPAGE", "OFFSTAGE", "ONSTAGE", "SCENE", stringOf(ARG_SEPARATOR),
-		stringOf(VALUE_SEPARATOR), stringOf(STAGE_DIR_START), stringOf(INDENTED_SPEECH_START)
-	};
-    
-	private Utils() {}
+
+    // Check bounds
+    check(
+        value >= minimum && value <= maximum,
+        "option value expect an integer from " + minimum + " to " + maximum
+    );
+
+    // Return value
+    return value;
+  }
+
+  /**
+   * Gets a {@link String} from a single character.
+   *
+   * @param c Character to convert.
+   * @return {@link String} made of the single <code>c</code> character.
+   */
+  private static String stringOf(char c) {
+    return String.valueOf(c);
+  }
 }
