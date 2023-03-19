@@ -85,7 +85,7 @@ public final class Play {
   public Play(String outputFileName) throws IOException {
     fileName = outputFileName;
     PdfDocument pdf = new PdfDocument(new PdfWriter(new FileOutputStream(fileName)));
-    pdf.getDocumentInfo().setCreator("PlayWriter Application " + Utils.VERSION);
+    pdf.getDocumentInfo().setCreator(Utils.getFullAppName() + "\n" + Utils.getCopyright());
     pageSize = pdf.addNewPage().getPageSize();
     document = new Document(pdf);
   }
