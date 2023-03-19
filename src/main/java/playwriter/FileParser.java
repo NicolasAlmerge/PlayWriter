@@ -26,7 +26,6 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 public final class FileParser {
 	private final BufferedReader fp;
 	private final FileInputStream wordFp;
-	private final XWPFDocument wordDoc;
 	private final List<XWPFParagraph> paragraphs;
 	private int currParagraphIndex = 0;
 	private final Play play;
@@ -39,13 +38,11 @@ public final class FileParser {
 		if (isPlainText) {
 			fp = new BufferedReader(new FileReader(inputFileName));
 			wordFp = null;
-			wordDoc = null;
 			paragraphs = null;
 		} else {
 			fp = null;
 			wordFp = new FileInputStream(inputFileName);
-			wordDoc = new XWPFDocument(wordFp);
-			paragraphs = wordDoc.getParagraphs();
+			paragraphs = new XWPFDocument(wordFp).getParagraphs();
 		}
 		play = new Play(outputFileName);
 		Counter.reset();

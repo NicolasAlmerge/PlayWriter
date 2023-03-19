@@ -22,10 +22,10 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 
 import static com.itextpdf.layout.borders.Border.NO_BORDER;
-import static com.itextpdf.layout.property.TextAlignment.CENTER;
-import static com.itextpdf.layout.property.TextAlignment.RIGHT;
-import static com.itextpdf.layout.property.TextAlignment.JUSTIFIED;
-import static com.itextpdf.layout.property.VerticalAlignment.MIDDLE;
+import static com.itextpdf.layout.properties.TextAlignment.CENTER;
+import static com.itextpdf.layout.properties.TextAlignment.RIGHT;
+import static com.itextpdf.layout.properties.TextAlignment.JUSTIFIED;
+import static com.itextpdf.layout.properties.VerticalAlignment.MIDDLE;
 import static com.itextpdf.io.font.constants.StandardFonts.TIMES_BOLD;
 import static com.itextpdf.io.font.constants.StandardFonts.TIMES_ITALIC;
 import static com.itextpdf.io.font.constants.StandardFonts.TIMES_ROMAN;
