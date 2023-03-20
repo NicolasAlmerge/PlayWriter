@@ -85,7 +85,7 @@ public final class Play {
   public Play(String outputFileName) throws IOException {
     fileName = outputFileName;
     PdfDocument pdf = new PdfDocument(new PdfWriter(new FileOutputStream(fileName)));
-    pdf.getDocumentInfo().setCreator(Utils.getFullAppName() + "\n" + Utils.getCopyright());
+    pdf.getDocumentInfo().setCreator(Utils.getPdfContentCreator());
     pageSize = pdf.addNewPage().getPageSize();
     document = new Document(pdf);
   }
@@ -532,7 +532,7 @@ public final class Play {
     try {
       PdfDocument pdf = new PdfDocument(new PdfWriter(new FileOutputStream(fileName)));
       pdf.addNewPage();
-      pdf.getDocumentInfo().setAuthor("PlayWriter Application");
+      pdf.getDocumentInfo().setCreator(Utils.getPdfContentCreator());
       document = new Document(pdf);
       final String error = "\n\n\n\n\n\n\n\nThe play generation failed due to a compilation error.";
       Paragraph p = new Paragraph(

@@ -114,7 +114,8 @@ public final class Utils {
   }
 
   /**
-   * Gets application name with version.
+   * Gets application name with version. This contains {@link Utils#APP_NAME} and
+   * {@link Utils#VERSION}.
    *
    * @return Application name with version.
    */
@@ -123,12 +124,23 @@ public final class Utils {
   }
 
   /**
-   * Gets copyright text.
+   * Gets copyright text. This contains {@link Utils#COPYRIGHT_START}, {@link Utils#COPYRIGHT_END}
+   * and {@link Utils#DEVELOPER_NAME}.
    *
    * @return Copyright text.
    */
   public static String getCopyright() {
     return "©" + COPYRIGHT_START + "-" + COPYRIGHT_END + " " + DEVELOPER_NAME;
+  }
+
+  /**
+   * Gets PDF content creator. This contains {@link Utils#getFullAppName()} and
+   * {@link Utils#getCopyright()}.
+   *
+   * @return PDF content creator.
+   */
+  public static String getPdfContentCreator() {
+    return getFullAppName() + "\n" + getCopyright();
   }
 
   /**
